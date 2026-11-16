@@ -1,0 +1,2 @@
+-- Planned MySQL schema section: 14 software licenses
+-- Implement and version schema changes in backend/src/main/resources/db/migration/.

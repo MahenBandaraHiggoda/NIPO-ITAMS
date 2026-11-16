@@ -1,0 +1,22 @@
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Java / Maven
+target/
+backend/target/
+*.class
+
+# Node
+node_modules/
+frontend/dist/
+frontend/node_modules/
+npm-debug.log*
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
