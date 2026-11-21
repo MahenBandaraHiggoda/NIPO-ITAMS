@@ -1,16 +1,19 @@
 import "./app.css";
+import "./dashboard.css";
+import AppShell from "@/components/app-shell";
 
 export const metadata = {
-  title: "NIPO ITAMS | Appwrite Connection",
+  title: "NIPO ITAMS | Dashboard",
   description:
-    "Check the Appwrite connection for the NIPO IT Asset Management System.",
-  icons: { icon: "/appwrite.svg" },
+    "IT asset management dashboard for the National Intellectual Property Office of Sri Lanka.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased">
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
