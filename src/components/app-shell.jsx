@@ -13,12 +13,12 @@ import {
   LayoutDashboard,
   Menu,
   PackageOpen,
-  Settings2,
   ShieldCheck,
   Users,
   Wrench,
   X,
 } from "lucide-react";
+import HeaderUserMenu from "@/components/header-user-menu";
 
 const navigation = [
   {
@@ -189,17 +189,24 @@ export default function AppShell({ children }) {
               </button>
               <Link
                 href="/"
-                className="office-brand"
+                className="office-identity"
                 aria-label="NIPO ITAMS home"
               >
                 <Image
-                  src="/images/nipo-official-header.png"
-                  alt="National Intellectual Property Office — Ministry of Trade, Commerce, Food Security & Co-operative Development"
-                  width={1326}
-                  height={174}
-                  sizes="(max-width: 760px) 54vw, 560px"
+                  src="/images/sri-lanka-government-emblem.png"
+                  alt="Sri Lankan Government Emblem"
+                  width={180}
+                  height={204}
+                  className="office-emblem"
                   priority
                 />
+                <span className="office-brand-copy">
+                  <strong>National Intellectual Property Office</strong>
+                  <small>
+                    Ministry of Trade, Commerce, Food Security &amp;
+                    Co-operative Development
+                  </small>
+                </span>
               </Link>
             </div>
             <div className="header-actions">
@@ -228,18 +235,7 @@ export default function AppShell({ children }) {
                 )}
               </div>
               <span className="header-divider" />
-              <div className="profile-block">
-                <span className="profile-avatar">MB</span>
-                <span className="profile-copy">
-                  <strong>Mahen Bandara</strong>
-                  <small>IT Asset Administrator</small>
-                </span>
-                <Settings2
-                  className="profile-settings"
-                  size={16}
-                  aria-hidden="true"
-                />
-              </div>
+              <HeaderUserMenu />
             </div>
           </header>
 

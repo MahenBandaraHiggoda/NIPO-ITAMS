@@ -322,17 +322,41 @@ a {
   gap: 15px;
 }
 
-.office-brand {
-  display: block;
-  width: min(100%, 560px);
+.office-identity {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 14px;
   min-width: 0;
-  line-height: 0;
+  color: inherit;
 }
 
-.office-brand img {
+.office-emblem {
   display: block;
-  width: 100%;
-  height: auto;
+  width: 52px;
+  height: 60px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.office-brand-copy {
+  display: block;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.office-brand-copy strong {
+  display: block;
+  color: #1d2b37;
+  font-size: clamp(12px, 1.15vw, 15px);
+  font-weight: 700;
+}
+
+.office-brand-copy small {
+  display: block;
+  margin-top: 4px;
+  color: #7e8992;
+  font-size: clamp(9px, 0.85vw, 11px);
 }
 
 .header-actions {
@@ -416,6 +440,252 @@ a {
   display: flex;
   align-items: center;
   gap: 9px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  padding: 3px 4px;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-block:hover,
+.profile-block[aria-expanded="true"] {
+  background: #f7f9fa;
+}
+
+.profile-block:focus-visible,
+.profile-menu-options button:focus-visible,
+.profile-signout:focus-visible,
+.profile-back:focus-visible,
+.profile-retry:focus-visible {
+  outline: 2px solid #477b9d;
+  outline-offset: 2px;
+}
+
+.profile-menu-wrap {
+  position: relative;
+}
+
+.profile-avatar {
+  overflow: hidden;
+}
+
+.profile-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+}
+
+.profile-loading {
+  animation: profile-spin 1s linear infinite;
+}
+
+.profile-chevron {
+  color: #98a2aa;
+}
+
+.profile-popover {
+  position: absolute;
+  z-index: 31;
+  top: calc(100% + 10px);
+  right: 0;
+  width: min(292px, calc(100vw - 24px));
+  overflow: hidden;
+  border: 1px solid #e4e9ed;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgb(22 42 60 / 13%);
+}
+
+.profile-popover-heading {
+  display: grid;
+  gap: 4px;
+  border-bottom: 1px solid #edf0f2;
+  padding: 13px 15px 11px;
+}
+
+.profile-popover-name {
+  overflow: hidden;
+  color: #344452;
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-popover-designation {
+  overflow: hidden;
+  color: #89949d;
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-menu-role {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #edf0f2;
+  padding: 0 15px;
+  color: #71808e;
+  font-size: 9px;
+}
+
+.profile-menu-role svg {
+  color: #9a814b;
+}
+
+.profile-menu-role strong {
+  overflow: hidden;
+  margin-left: auto;
+  color: #435665;
+  font-size: 9px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-menu-options {
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+}
+
+.profile-menu-options button,
+.profile-signout,
+.profile-back {
+  display: flex;
+  width: 100%;
+  min-height: 34px;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: 3px;
+  background: transparent;
+  padding: 0 9px;
+  color: #526473;
+  font: inherit;
+  font-size: 9px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile-menu-options button:hover:not(:disabled),
+.profile-back:hover {
+  background: #f4f7f8;
+  color: #164a70;
+}
+
+.profile-menu-options button:disabled {
+  color: #a7b0b6;
+  cursor: not-allowed;
+}
+
+.profile-menu-options svg {
+  color: #7d8b95;
+}
+
+.profile-menu-footer {
+  border-top: 1px solid #edf0f2;
+  padding: 6px;
+}
+
+.profile-signout {
+  color: #a14d46;
+}
+
+.profile-signout:hover:not(:disabled) {
+  background: #fbf2f1;
+}
+
+.profile-signout:disabled {
+  color: #a7b0b6;
+  cursor: not-allowed;
+}
+
+.profile-menu-error {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border-bottom: 1px solid #f0dfdc;
+  background: #fff8f6;
+  padding: 9px 11px;
+  color: #98524a;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.profile-menu-error > svg {
+  flex: 0 0 auto;
+}
+
+.profile-retry {
+  display: grid;
+  width: 25px;
+  height: 25px;
+  flex: 0 0 auto;
+  place-items: center;
+  margin-left: auto;
+  border: 1px solid #ecd7d3;
+  border-radius: 3px;
+  background: #fff;
+  color: #98524a;
+  cursor: pointer;
+}
+
+.profile-signout-error {
+  margin: 0;
+  border-top: 1px solid #f0dfdc;
+  background: #fff8f6;
+  padding: 8px 12px;
+  color: #98524a;
+  font-size: 8px;
+  line-height: 1.4;
+}
+
+.profile-menu-detail {
+  padding: 7px;
+}
+
+.profile-back {
+  color: #285d7e;
+  font-weight: 600;
+}
+
+.profile-menu-detail dl {
+  display: grid;
+  gap: 9px;
+  margin: 8px 3px 4px;
+}
+
+.profile-menu-detail dl > div {
+  display: grid;
+  gap: 3px;
+}
+
+.profile-menu-detail dt {
+  color: #89949d;
+  font-size: 8px;
+}
+
+.profile-menu-detail dd {
+  overflow-wrap: anywhere;
+  margin: 0;
+  color: #435665;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.profile-menu-detail p {
+  margin: 6px 3px 4px;
+  color: #71808e;
+  font-size: 9px;
+  line-height: 1.5;
 }
 
 .profile-avatar {
@@ -438,19 +708,33 @@ a {
 }
 
 .profile-copy strong {
+  max-width: 170px;
+  overflow: hidden;
   color: #344452;
   font-size: 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profile-copy small {
+  max-width: 170px;
+  overflow: hidden;
   margin-top: 3px;
   color: #89949d;
   font-size: 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .profile-settings {
   margin-left: 2px;
   color: #98a2aa;
+}
+
+@keyframes profile-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .mobile-menu-button,
@@ -1715,12 +1999,31 @@ a {
     padding: 9px 16px;
   }
 
-  .office-brand {
-    width: min(54vw, 440px);
+  .office-header-title {
+    flex: 1;
+    gap: 10px;
+  }
+
+  .office-identity {
+    gap: 8px;
+  }
+
+  .office-emblem {
+    width: 43px;
+    height: 52px;
+  }
+
+  .office-brand-copy strong {
+    font-size: 11px;
+  }
+
+  .office-brand-copy small {
+    font-size: 8px;
   }
 
   .profile-copy,
   .profile-settings,
+  .profile-chevron,
   .header-divider {
     display: none;
   }
@@ -1833,8 +2136,22 @@ a {
     gap: 8px;
   }
 
-  .office-brand {
-    width: min(58vw, 255px);
+  .office-emblem {
+    width: 36px;
+    height: 45px;
+  }
+
+  .office-brand-copy {
+    line-height: 1.15;
+  }
+
+  .office-brand-copy strong {
+    font-size: 10px;
+  }
+
+  .office-brand-copy small {
+    margin-top: 3px;
+    font-size: 7px;
   }
 
   .profile-avatar {
