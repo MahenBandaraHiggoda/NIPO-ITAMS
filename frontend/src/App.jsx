@@ -14,6 +14,7 @@ import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded'
 import { useLocation, useNavigate } from 'react-router-dom'
 import DashboardPage from './features/dashboard/DashboardPage.jsx'
 import AssetsPage from './features/assets/AssetsPage.jsx'
+import Login from './pages/auth/Login.jsx' // ADDED
 
 const drawerWidth = 264
 const navigation = [
@@ -32,6 +33,7 @@ export default function App() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  if (location.pathname === '/login') return <Login /> // ADDED
   return <Box className="app-shell">
     <Drawer variant="permanent" className="sidebar desktop-sidebar" sx={{ '& .MuiDrawer-paper': { width: drawerWidth, boxSizing: 'border-box' } }}>
       <Brand /> <Navigation location={location} navigate={navigate} />
