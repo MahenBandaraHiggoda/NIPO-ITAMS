@@ -1,2 +1,0 @@
--- Planned MySQL schema section: 02 roles permissions
--- Implement and version schema changes in backend/src/main/resources/db/migration/.
