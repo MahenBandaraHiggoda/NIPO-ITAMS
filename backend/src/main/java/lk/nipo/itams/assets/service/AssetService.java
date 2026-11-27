@@ -4,6 +4,7 @@ import lk.nipo.itams.assets.dto.AssetRequest;
 import lk.nipo.itams.assets.entity.Asset;
 import lk.nipo.itams.assets.exception.DuplicateAssetException;
 import lk.nipo.itams.assets.repository.AssetRepository;
+import lk.nipo.itams.assignments.repository.AssetAssignmentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,8 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class AssetService {
     private static final String[] STATUSES = {"ACTIVE", "AVAILABLE", "ASSIGNED", "UNDER_MAINTENANCE", "RETIRED"};
     private final AssetRepository repository;
+    private final AssetAssignmentRepository assignmentRepository;
 
-    public AssetService(AssetRepository repository) { this.repository = repository; }
+    public AssetService(AssetRepository repository, AssetAssignmentRepository assignmentRepository) {
+        this.repository = repository;
+        this.assignmentRepository = assignmentRepository;
+    }
 
     @Transactional(readOnly = true)
     public Page<Asset> list(String search, String status, Pageable pageable) {
@@ -38,8 +43,15 @@ public class AssetService {
 
     public Asset update(Long id, AssetRequest request) {
         Asset asset = get(id);
+        boolean hasCurrentAssignment = assignmentRepository.existsByAsset_IdAndReturnedDateIsNull(id);
+        if (hasCurrentAssignment
+                && request.status() != null
+                && !"ASSIGNED".equalsIgnoreCase(request.status())) {
+            throw new IllegalArgumentException("An assigned asset must be returned before its status can change");
+        }
         ensureUnique(request, id);
         apply(asset, request);
+        if (hasCurrentAssignment) asset.setStatus("ASSIGNED");
         return repository.save(asset);
     }
 

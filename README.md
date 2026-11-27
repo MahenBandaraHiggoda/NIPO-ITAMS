@@ -5,60 +5,39 @@ The National Intellectual Property Office IT Asset Management System.
 ## Project structure
 
 - The repository root contains the Next.js App Router dashboard.
-- `backend/` contains the Java 21 Spring Boot REST API.
+- `src/app/api/` contains the development API, backed by a local SQLite database.
+- `backend/` contains the separate Spring Boot API for MySQL deployments.
 - `database/` contains MySQL schema design, migrations, and seed guidance.
 - `docs/` contains requirements, architecture, API, and deployment notes.
 - `frontend/` contains the separate React and Vite client scaffold.
 
-The dashboard gets asset totals and recent asset records from the API. Store
-stock, approvals, and activity currently use clearly labeled sample data.
+The dashboard gets asset totals and recent asset records from the local API.
+Store stock, approvals, and activity currently use clearly labeled sample data.
 Authentication and the remaining business modules require further
 implementation before deployment.
 
 ## Requirements
 
-- Node.js 24 LTS and pnpm 12 for the Next.js dashboard.
-- Java 21 and Maven 3.9+ for the API.
-- Docker with Docker Compose for the local MySQL database.
+- Node.js 24 and pnpm for the dashboard and SQLite development API.
+- Java 21, Maven 3.9+, and Docker Compose are only needed for the separate
+  Spring Boot/MySQL backend; they are not needed for local feature development.
 
-## Run locally
+## Develop locally with SQLite
 
-1. Copy `backend/.env.example` to `backend/.env` and set local database
-   credentials if needed. The example values work with the local Compose
-   defaults. This file is ignored by Git.
-2. Start MySQL from the repository root:
+From the repository root:
 
-   ```sh
-   docker compose --env-file backend/.env up -d db
-   ```
+```sh
+pnpm install
+pnpm dev
+```
 
-3. Start the API in a terminal:
-
-   ```sh
-   cd backend
-   set -a
-   source .env
-   set +a
-   mvn spring-boot:run
-   ```
-
-   The API runs at `http://localhost:8080/api`. The API documentation is
-   available at `http://localhost:8080/swagger-ui.html`.
-
-4. In another terminal, from the repository root, install and start the
-   dashboard:
-
-   ```sh
-   pnpm install
-   pnpm dev
-   ```
-
-5. Open `http://localhost:3000`. Next.js proxies `/api` requests to the local
-   backend. Set `ITAMS_API_URL` if the API runs at a different origin.
+Open `http://localhost:3000`. The Next.js route handlers create and use
+`data/itams.sqlite` automatically; that local database file is ignored by Git.
+Set `ITAMS_SQLITE_PATH` to use a different SQLite file.
 
 To run the Vite client instead, copy `frontend/.env.example` to
 `frontend/.env`, then run `npm install` and `npm run dev` from `frontend/`.
-Its API URL defaults to `http://localhost:8080/api`.
+The Vite scaffold still expects the separate Spring Boot API.
 
 ## Current API
 
@@ -69,10 +48,22 @@ Its API URL defaults to `http://localhost:8080/api`.
 - `PUT /api/assets/{id}` — update an asset.
 - `DELETE /api/assets/{id}` — soft-retire an asset.
 - `GET /api/dashboard/summary` — live register totals.
+- `GET /api/employees` — searchable, filterable, paginated employee list.
+- `POST /api/employees` — create an employee.
+- `GET /api/employees/{id}` and `PUT /api/employees/{id}` — read or update an employee.
+- `GET /api/departments` — list departments and divisions.
+- `POST /api/departments` — create a department or division.
+- `GET /api/departments/{id}` and `PUT /api/departments/{id}` — read or update a department or division.
+- `POST /api/assignments` — assign an available asset to an active employee with an assignment date.
+- `POST /api/assignments/{id}/return` — return an assigned asset and make it available again.
+- `POST /api/assignments/{id}/transfer` — transfer an assigned asset to another active employee.
+- `GET /api/employees/{id}/assignments` — list an employee's current assigned equipment.
 
-All API responses use `{ success, message, data, timestamp }`. Flyway creates
-the database schema on API startup. The API owns persistence and validates
-asset code and serial number uniqueness.
+All development API responses use `{ success, message, data, timestamp }`.
+SQLite tables are initialized automatically on the first API request. Asset
+codes and non-empty serial numbers are unique; employee work email is optional
+and unique when provided. NIC is not collected; authentication and access
+controls must be implemented before storing it.
 
 ## Production build
 
