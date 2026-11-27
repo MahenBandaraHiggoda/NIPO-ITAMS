@@ -513,6 +513,35 @@ async function handleEmployees(database, method, segments, url, request) {
     return response(rows, "Current employee equipment loaded");
   }
 
+  if (
+    segments.length === 3 &&
+    segments[2] === "assignment-history" &&
+    method === "GET"
+  ) {
+    const employeeId = parseId(segments[1], "Employee id");
+    if (
+      !database.prepare("SELECT 1 FROM employee WHERE id = ?").get(employeeId)
+    ) {
+      throw new ApiError(404, "Employee not found");
+    }
+    const rows = database
+      .prepare(
+        `
+        SELECT aa.id, aa.asset_id, a.asset_code, a.asset_name, a.category,
+               a.asset_type, a.serial_number, aa.employee_id, e.full_name AS employee_name,
+               aa.assigned_date, aa.returned_date
+        FROM asset_assignment aa
+        JOIN asset a ON a.id = aa.asset_id
+        JOIN employee e ON e.id = aa.employee_id
+        WHERE aa.employee_id = ? AND aa.returned_date IS NOT NULL
+        ORDER BY aa.assigned_date DESC, aa.id DESC
+      `,
+      )
+      .all(employeeId)
+      .map(assignmentResponse);
+    return response(rows, "Employee assignment history loaded");
+  }
+
   throw new ApiError(405, "Method not allowed");
 }
 

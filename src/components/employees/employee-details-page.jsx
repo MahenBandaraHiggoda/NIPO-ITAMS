@@ -8,6 +8,7 @@ import {
   CalendarDays,
   Check,
   CircleAlert,
+  History,
   Mail,
   Monitor,
   Pencil,
@@ -99,6 +100,56 @@ async function getCurrentAssignments(employeeId, signal) {
     )
   ) {
     throw new Error("The assignment service returned invalid records.");
+  }
+
+  return result.data;
+}
+
+async function getAssignmentHistory(employeeId, signal) {
+  const response = await fetch(
+    `${apiBase}/employees/${employeeId}/assignment-history`,
+    {
+      signal,
+      headers: { Accept: "application/json" },
+      cache: "no-store",
+    },
+  );
+
+  const body = await response.text();
+  let result;
+  try {
+    result = JSON.parse(body);
+  } catch {
+    if (!response.ok) {
+      throw new Error(
+        `The assignment history service returned HTTP ${response.status}${body ? `: ${body.slice(0, 180)}` : ""}.`,
+      );
+    }
+    throw new Error(
+      "The assignment history service returned an invalid response.",
+    );
+  }
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(
+      result?.message ||
+        `The assignment history service returned HTTP ${response.status}.`,
+    );
+  }
+
+  if (
+    !Array.isArray(result?.data) ||
+    result.data.some(
+      (assignment) =>
+        !Number.isInteger(assignment.id) ||
+        !Number.isInteger(assignment.assetId) ||
+        typeof assignment.assetCode !== "string" ||
+        typeof assignment.assetName !== "string" ||
+        typeof assignment.assignedDate !== "string" ||
+        typeof assignment.returnedDate !== "string",
+    )
+  ) {
+    throw new Error("The assignment history service returned invalid records.");
   }
 
   return result.data;
@@ -337,10 +388,13 @@ function AssignmentControls({ assignment, onChanged }) {
 export default function EmployeeDetailsPage({ employeeId }) {
   const [employee, setEmployee] = useState(null);
   const [assignments, setAssignments] = useState([]);
+  const [assignmentHistory, setAssignmentHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [assignmentsLoading, setAssignmentsLoading] = useState(true);
   const [assignmentsError, setAssignmentsError] = useState("");
+  const [historyLoading, setHistoryLoading] = useState(true);
+  const [historyError, setHistoryError] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
@@ -348,25 +402,40 @@ export default function EmployeeDetailsPage({ employeeId }) {
     let employeeLoaded = false;
     setLoading(true);
     setAssignmentsLoading(true);
+    setHistoryLoading(true);
     setError("");
     setAssignmentsError("");
+    setHistoryError("");
 
     getEmployee(employeeId, controller.signal)
       .then((employeeData) => {
         setEmployee(employeeData);
         employeeLoaded = true;
         setLoading(false);
-        return getCurrentAssignments(employeeId, controller.signal);
+        return Promise.all([
+          getCurrentAssignments(employeeId, controller.signal)
+            .then(setAssignments)
+            .catch((requestError) => {
+              if (requestError.name !== "AbortError") {
+                setAssignments([]);
+                setAssignmentsError(getErrorMessage(requestError));
+              }
+            }),
+          getAssignmentHistory(employeeId, controller.signal)
+            .then(setAssignmentHistory)
+            .catch((requestError) => {
+              if (requestError.name !== "AbortError") {
+                setAssignmentHistory([]);
+                setHistoryError(getErrorMessage(requestError));
+              }
+            }),
+        ]);
       })
-      .then(setAssignments)
       .catch((requestError) => {
         if (requestError.name !== "AbortError") {
           if (!employeeLoaded) {
             setEmployee(null);
             setError(getErrorMessage(requestError));
-          } else {
-            setAssignments([]);
-            setAssignmentsError(getErrorMessage(requestError));
           }
         }
       })
@@ -374,6 +443,7 @@ export default function EmployeeDetailsPage({ employeeId }) {
         if (!controller.signal.aborted) {
           setLoading(false);
           setAssignmentsLoading(false);
+          setHistoryLoading(false);
         }
       });
 
@@ -546,6 +616,81 @@ export default function EmployeeDetailsPage({ employeeId }) {
             ) : (
               <div className="employee-assignment-empty">
                 No equipment is currently assigned to this employee.
+              </div>
+            )}
+          </section>
+
+          <section className="panel employee-details-panel">
+            <div className="employee-details-panel-heading">
+              <div>
+                <span className="section-kicker">ASSIGNMENT HISTORY</span>
+                <h2>Previous equipment assignments</h2>
+              </div>
+            </div>
+
+            {historyError ? (
+              <div className="employee-assignment-error" role="alert">
+                <CircleAlert size={16} aria-hidden="true" />
+                <div>
+                  <strong>Could not load assignment history</strong>
+                  <p>{historyError}</p>
+                  <button
+                    type="button"
+                    className="employee-retry-button"
+                    onClick={() => setRefreshKey((key) => key + 1)}
+                  >
+                    <RefreshCw size={13} aria-hidden="true" />
+                    Retry
+                  </button>
+                </div>
+              </div>
+            ) : historyLoading ? (
+              <div className="register-loading" role="status">
+                <span className="loading-spinner" />
+                Loading assignment history…
+              </div>
+            ) : assignmentHistory.length > 0 ? (
+              <div className="employee-assignment-history-list">
+                {assignmentHistory.map((assignment) => (
+                  <article
+                    className="employee-assignment-history-item"
+                    key={assignment.id}
+                  >
+                    <span className="employee-assignment-icon">
+                      <History size={17} aria-hidden="true" />
+                    </span>
+                    <div className="employee-assignment-asset">
+                      <strong>{assignment.assetName}</strong>
+                      <span>
+                        {assignment.assetCode}
+                        {assignment.category ? ` · ${assignment.category}` : ""}
+                        {assignment.type ? ` · ${assignment.type}` : ""}
+                      </span>
+                    </div>
+                    <div className="employee-assignment-history-dates">
+                      <div>
+                        <span>Assigned</span>
+                        <strong>
+                          {new Date(
+                            `${assignment.assignedDate}T00:00:00`,
+                          ).toLocaleDateString()}
+                        </strong>
+                      </div>
+                      <div>
+                        <span>Returned / transferred</span>
+                        <strong>
+                          {new Date(
+                            `${assignment.returnedDate}T00:00:00`,
+                          ).toLocaleDateString()}
+                        </strong>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="employee-assignment-empty">
+                No previous equipment assignments.
               </div>
             )}
           </section>

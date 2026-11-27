@@ -38,6 +38,8 @@ Base path: `/api`. During local development, Next.js route handlers use the Node
 
 `GET /employees/{employeeId}/assignments` lists the employee's current assigned equipment, including the asset code, name, category/type, serial number, and assignment date.
 
+`GET /employees/{employeeId}/assignment-history` lists the employee's completed assignments, including the asset code, name, category/type, assignment date, and return or transfer date.
+
 Authentication is not implemented in this foundation; do not expose the API to a production network.
 
 The separate Java/Spring Boot API and its Swagger UI remain under `backend/` for MySQL-based deployments. They are not required to develop the Next.js app against local SQLite.

@@ -2297,6 +2297,45 @@ a {
   gap: 6px;
 }
 
+.employee-assignment-history-list {
+  display: grid;
+}
+
+.employee-assignment-history-item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #edf0f2;
+  padding: 15px 19px;
+}
+
+.employee-assignment-history-item:last-child {
+  border-bottom: 0;
+}
+
+.employee-assignment-history-dates {
+  display: grid;
+  flex: 0 0 auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.employee-assignment-history-dates > div {
+  display: grid;
+  gap: 4px;
+}
+
+.employee-assignment-history-dates span {
+  color: #82909a;
+  font-size: 8px;
+}
+
+.employee-assignment-history-dates strong {
+  color: #344a5b;
+  font-size: 9px;
+}
+
 .employee-assignment-actions,
 .employee-assignment-action-buttons {
   display: flex;
@@ -2857,6 +2896,15 @@ a {
 
   .employee-assignment-item {
     flex-wrap: wrap;
+  }
+
+  .employee-assignment-history-item {
+    flex-wrap: wrap;
+  }
+
+  .employee-assignment-history-dates {
+    flex-basis: calc(100% - 46px);
+    margin-left: 46px;
   }
 
   .employee-assignment-date {

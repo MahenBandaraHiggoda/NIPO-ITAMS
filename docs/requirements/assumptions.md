@@ -18,4 +18,4 @@ The project proposal describes a broader system than the current implementation.
 - Asset status values are currently `ACTIVE`, `AVAILABLE`, `ASSIGNED`, `UNDER_MAINTENANCE`, and `RETIRED`.
 - Category, type, department, location, and supplier are currently descriptive text fields; controlled vocabularies and ownership rules need confirmation.
 - No authentication, roles, retention policy, approval workflow, currency, or QR exposure policy has been supplied. The development API must not be exposed as a production system until those requirements are approved and implemented.
-- The current assignment form assigns an available asset to one active employee and records the assignment date. Assignment rows preserve prior records for future return/history support. Department/division assignment, return, transfer, and assignment-history screens/endpoints are not implemented yet.
+- The current assignment form assigns an available asset to one active employee and records the assignment date. Assignment rows preserve prior records; employees can return or transfer assigned assets and view completed assignment history on their detail page.
