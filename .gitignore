@@ -19,6 +19,8 @@ next-env.d.ts
 
 # Build output
 /build/
+/data/*.sqlite
+/data/*.sqlite-*
 frontend/dist/
 backend/target/
 target/

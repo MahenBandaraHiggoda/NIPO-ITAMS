@@ -8,11 +8,6 @@ const sections = {
       "View and manage equipment recorded in the NIPO asset register.",
     icon: "inventory",
   },
-  employees: {
-    title: "Employees",
-    description: "Find staff members and see the equipment assigned to them.",
-    icon: "employees",
-  },
   store: {
     title: "Store",
     description:

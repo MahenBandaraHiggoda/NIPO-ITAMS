@@ -1,6 +1,6 @@
 # Requirements status and implementation assumptions
 
-The supplied master prompt proposes a broad 92-page breakdown and a technology stack, but its text ends during section 7. No approved proposal or complete functional requirements are present in the repository. This document records the narrow foundation implemented so that proposed page details are not mistaken for approved policy.
+The project proposal describes a broader system than the current implementation. This document records implemented behavior and agreed assumptions so that unimplemented requirements are not mistaken for available features.
 
 ## Implemented foundation
 
@@ -9,10 +9,13 @@ The supplied master prompt proposes a broad 92-page breakdown and a technology s
 - Require a unique asset code; serial numbers are unique when present.
 - Retirement is represented as a status transition, preserving the record and avoiding destructive deletion.
 - Store dates without a time zone and monetary purchase cost as decimal currency units. Currency display is not fixed until confirmed.
+- Maintain employees with a required full name, optional unique work email, optional department/division, and active status.
+- Maintain departments and divisions as organizational units with a type; deactivate rather than hard-delete them.
+- Do not collect NIC until authentication and access controls are implemented.
 
 ## Configurable / needs approval
 
 - Asset status values are currently `ACTIVE`, `AVAILABLE`, `ASSIGNED`, `UNDER_MAINTENANCE`, and `RETIRED`.
 - Category, type, department, location, and supplier are currently descriptive text fields; controlled vocabularies and ownership rules need confirmation.
 - No authentication, roles, retention policy, approval workflow, currency, or QR exposure policy has been supplied. The development API must not be exposed as a production system until those requirements are approved and implemented.
-- The additional modules in the pasted page inventory remain proposed pending traceability to the approved project proposal.
+- The current assignment form assigns an available asset to one active employee and records the assignment date. Assignment rows preserve prior records; employees can return or transfer assigned assets and view completed assignment history on their detail page.

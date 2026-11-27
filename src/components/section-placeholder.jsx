@@ -6,13 +6,11 @@ import {
   BriefcaseBusiness,
   PackageOpen,
   ShieldCheck,
-  Users,
   Wrench,
 } from "lucide-react";
 
 const icons = {
   inventory: Boxes,
-  employees: Users,
   store: PackageOpen,
   procurement: BriefcaseBusiness,
   maintenance: Wrench,
