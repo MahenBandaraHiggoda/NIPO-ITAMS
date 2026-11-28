@@ -1,3 +1,4 @@
+import RequestForm from "./request-form";
 const requests = [
   { id: 1, year: 2026, item: "Desktop PC", requested: 20, approved: 12 },
   { id: 2, year: 2026, item: "Laptop", requested: 10, approved: 10 },
@@ -6,6 +7,7 @@ const requests = [
 
 export default function ProcurementPage() {
   return (
+  
     <main className="mx-auto max-w-5xl p-6">
       <h1 className="text-2xl font-semibold">Procurement & Annual Planning</h1>
       <p className="mt-1 text-sm text-gray-500">
@@ -36,6 +38,7 @@ export default function ProcurementPage() {
           </tbody>
         </table>
       </div>
+            <RequestForm />
     </main>
   );
 }
