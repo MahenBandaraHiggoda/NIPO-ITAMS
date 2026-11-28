@@ -1,5 +1,6 @@
 import ApprovalOutcomes from "./approval-outcomes";
 import BudgetSummary from "./budget-summary";
+import ProcurementTracker from "./procurement-tracker";
 import RequestForm from "./request-form";
 
 export default function ProcurementPage() {
@@ -11,6 +12,7 @@ export default function ProcurementPage() {
       </p>
 
       <ApprovalOutcomes />
+      <ProcurementTracker />
       <BudgetSummary />
       <RequestForm />
     </main>
