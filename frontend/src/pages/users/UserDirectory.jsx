@@ -1,28 +1,19 @@
 import { useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Button, MenuItem, TextField } from '@mui/material'
 import PersonAddAlt1RoundedIcon from '@mui/icons-material/PersonAddAlt1Rounded'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded'
 import PeopleAltRoundedIcon from '@mui/icons-material/PeopleAltRounded'
-
-// TEMPORARY mock data until the backend users API is ready.
-const MOCK_USERS = [
-  { id: 1, name: 'Nimali Perera', email: 'nimali.perera@nipo.gov.lk', role: 'Admin', department: 'IT Division', status: 'active' },
-  { id: 2, name: 'Kasun Fernando', email: 'kasun.fernando@nipo.gov.lk', role: 'IT Officer', department: 'IT Division', status: 'active' },
-  { id: 3, name: 'Sanduni Silva', email: 'sanduni.silva@nipo.gov.lk', role: 'Store Keeper', department: 'Stores', status: 'active' },
-  { id: 4, name: 'Ruwan Jayasinghe', email: 'ruwan.jayasinghe@nipo.gov.lk', role: 'Staff', department: 'Finance', status: 'inactive' },
-  { id: 5, name: 'Dilini Wickramasinghe', email: 'dilini.w@nipo.gov.lk', role: 'Staff', department: 'Legal', status: 'active' },
-  { id: 6, name: 'Chamara Bandara', email: 'chamara.bandara@nipo.gov.lk', role: 'IT Officer', department: 'IT Division', status: 'inactive' },
-  { id: 7, name: 'Tharushi Gunawardena', email: 'tharushi.g@nipo.gov.lk', role: 'Staff', department: 'Administration', status: 'active' },
-  { id: 8, name: 'Pradeep Rathnayake', email: 'pradeep.r@nipo.gov.lk', role: 'Staff', department: 'Procurement', status: 'active' },
-]
+import { getUsers } from './mockUsers.js'
 
 export default function UserDirectory() {
+  const navigate = useNavigate()
   const [query, setQuery] = useState('')
   const [status, setStatus] = useState('all')
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
-    return MOCK_USERS.filter((u) => {
+    return getUsers().filter((u) => {
       const matchesStatus = status === 'all' || u.status === status
       const matchesQuery =
         !q ||
@@ -42,7 +33,11 @@ export default function UserDirectory() {
           <h4>Users</h4>
           <p>Manage staff accounts, roles and account status.</p>
         </div>
-        <Button variant="contained" startIcon={<PersonAddAlt1RoundedIcon />} disabled>
+        <Button
+          variant="contained"
+          startIcon={<PersonAddAlt1RoundedIcon />}
+          onClick={() => navigate('/users/new')}
+        >
           Add user
         </Button>
       </div>
@@ -101,6 +96,7 @@ export default function UserDirectory() {
                   <th>ROLE</th>
                   <th>DEPARTMENT</th>
                   <th>STATUS</th>
+                  <th className="row-actions">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
@@ -114,6 +110,11 @@ export default function UserDirectory() {
                     <td>{u.department}</td>
                     <td>
                       <span className={`status-pill ${u.status}`}>{u.status}</span>
+                    </td>
+                    <td className="row-actions">
+                      <button type="button" onClick={() => navigate(`/users/${u.id}/edit`)}>
+                        Edit
+                      </button>
                     </td>
                   </tr>
                 ))}
