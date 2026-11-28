@@ -1,4 +1,5 @@
 import ApprovalOutcomes from "./approval-outcomes";
+import BudgetSummary from "./budget-summary";
 import RequestForm from "./request-form";
 
 export default function ProcurementPage() {
@@ -10,6 +11,7 @@ export default function ProcurementPage() {
       </p>
 
       <ApprovalOutcomes />
+      <BudgetSummary />
       <RequestForm />
     </main>
   );
