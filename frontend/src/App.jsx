@@ -17,6 +17,7 @@ import AssetsPage from './features/assets/AssetsPage.jsx'
 import Login from './pages/auth/Login.jsx' // ADDED
 import UserDirectory from './pages/users/UserDirectory.jsx' // ADDED
 import UserForm from './pages/users/UserForm.jsx' // ADDED
+import Profile from './pages/profile/Profile.jsx' // ADDED
 
 const drawerWidth = 264
 const navigation = [
@@ -47,10 +48,10 @@ export default function App() {
     <Box component="main" className="main-area" sx={{ ml: { md: `${drawerWidth}px` } }}>
       <header className="topbar"><Toolbar disableGutters>
         <IconButton onClick={() => setOpen(true)} className="mobile-menu" aria-label="Open navigation"><MenuRoundedIcon /></IconButton>
-        <div className="crumb"><span>Workspace</span><b>/</b>{location.pathname === '/assets' ? 'Asset register' : location.pathname.startsWith('/users') ? 'Users' : 'Overview'}</div>
+        <div className="crumb"><span>Workspace</span><b>/</b>{location.pathname === '/assets' ? 'Asset register' : location.pathname.startsWith('/users') ? 'Users' : location.pathname === '/profile' ? 'My profile' : 'Overview'}</div>
         <div className="topbar-right"><span className="topbar-label">National Intellectual Property Office</span><div className="user-avatar">IT</div></div>
       </Toolbar></header>
-      <Box className="page-content"><Routes><Route path="/" element={<DashboardPage />} /><Route path="/assets" element={<AssetsPage />} /><Route path="/users" element={<UserDirectory />} /><Route path="/users/new" element={<UserForm />} /><Route path="/users/:id/edit" element={<UserForm />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></Box>
+      <Box className="page-content"><Routes><Route path="/" element={<DashboardPage />} /><Route path="/assets" element={<AssetsPage />} /><Route path="/users" element={<UserDirectory />} /><Route path="/users/new" element={<UserForm />} /><Route path="/users/:id/edit" element={<UserForm />} /><Route path="/profile" element={<Profile />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></Box>
     </Box>
   </Box>
 }
