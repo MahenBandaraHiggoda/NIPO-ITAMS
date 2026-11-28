@@ -18,6 +18,7 @@ import Login from './pages/auth/Login.jsx' // ADDED
 import UserDirectory from './pages/users/UserDirectory.jsx' // ADDED
 import UserForm from './pages/users/UserForm.jsx' // ADDED
 import Profile from './pages/profile/Profile.jsx' // ADDED
+import Settings from './pages/settings/Settings.jsx' // ADDED
 
 const drawerWidth = 264
 const navigation = [
@@ -29,7 +30,7 @@ const navigation = [
   { label: 'Maintenance', icon: BuildRoundedIcon, group: 'MANAGEMENT' },
   { label: 'Software & licenses', icon: AppsRoundedIcon, group: 'MANAGEMENT' },
   { label: 'Reports', icon: AssessmentRoundedIcon, group: 'INSIGHTS' },
-  { label: 'Settings', icon: SettingsRoundedIcon, group: 'SYSTEM' },
+  { label: 'Settings', path: '/settings', icon: SettingsRoundedIcon, group: 'SYSTEM' },
 ]
 
 export default function App() {
@@ -48,10 +49,10 @@ export default function App() {
     <Box component="main" className="main-area" sx={{ ml: { md: `${drawerWidth}px` } }}>
       <header className="topbar"><Toolbar disableGutters>
         <IconButton onClick={() => setOpen(true)} className="mobile-menu" aria-label="Open navigation"><MenuRoundedIcon /></IconButton>
-        <div className="crumb"><span>Workspace</span><b>/</b>{location.pathname === '/assets' ? 'Asset register' : location.pathname.startsWith('/users') ? 'Users' : location.pathname === '/profile' ? 'My profile' : 'Overview'}</div>
+        <div className="crumb"><span>Workspace</span><b>/</b>{location.pathname === '/assets' ? 'Asset register' : location.pathname.startsWith('/users') ? 'Users' : location.pathname === '/profile' ? 'My profile' : location.pathname === '/settings' ? 'Settings' : 'Overview'}</div>
         <div className="topbar-right"><span className="topbar-label">National Intellectual Property Office</span><div className="user-avatar">IT</div></div>
       </Toolbar></header>
-      <Box className="page-content"><Routes><Route path="/" element={<DashboardPage />} /><Route path="/assets" element={<AssetsPage />} /><Route path="/users" element={<UserDirectory />} /><Route path="/users/new" element={<UserForm />} /><Route path="/users/:id/edit" element={<UserForm />} /><Route path="/profile" element={<Profile />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></Box>
+      <Box className="page-content"><Routes><Route path="/" element={<DashboardPage />} /><Route path="/assets" element={<AssetsPage />} /><Route path="/users" element={<UserDirectory />} /><Route path="/users/new" element={<UserForm />} /><Route path="/users/:id/edit" element={<UserForm />} /><Route path="/profile" element={<Profile />} /><Route path="/settings" element={<Settings />} /><Route path="*" element={<Navigate to="/" replace />} /></Routes></Box>
     </Box>
   </Box>
 }
